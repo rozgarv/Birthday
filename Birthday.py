@@ -40,7 +40,6 @@ scenarios = [
 if st.session_state.current_question == 0:
     if st.button("Start Your Adventure"):
         st.session_state.current_question = 1
-        # No need to rerun here, app will naturally update
 
 # Show the current question based on the progress
 if st.session_state.current_question > 0 and st.session_state.current_question <= len(scenarios):
@@ -55,11 +54,8 @@ if st.session_state.current_question > 0 and st.session_state.current_question <
         else:
             st.error("Oops! Not the best strategy, but keep going!")
 
-        time.sleep(1)  # Pause for dramatic effect
-
-        # Move to the next question
+        # Move to the next question without rerun
         st.session_state.current_question += 1
-        st.experimental_rerun()  # Refresh the app to display the next question
 
 # Show the final score and message only after all questions are answered
 if st.session_state.current_question > len(scenarios):
