@@ -4,10 +4,11 @@ import time
 # Set page configuration
 st.set_page_config(page_title="Happy Birthday Shristee!", layout="centered")
 
-# Initialize session state to keep track of the current question and score
+# Initialize session state to track the current question, score, and submissions
 if "current_question" not in st.session_state:
     st.session_state.current_question = 0
     st.session_state.score = 0
+    st.session_state.submissions = [False] * 3  # 3 questions total, initially all False
 
 # Welcome screen
 st.title("🎉 Happy Birthday, Shristee! 🎉")
@@ -41,21 +42,32 @@ if st.session_state.current_question == 0:
     if st.button("Start Your Adventure"):
         st.session_state.current_question = 1
 
-# Show the current question based on the progress
-if st.session_state.current_question > 0 and st.session_state.current_question <= len(scenarios):
-    scenario = scenarios[st.session_state.current_question - 1]
-    st.subheader(scenario["scenario"])
-    choice = st.radio("Choose your strategy:", scenario["options"], key=f"radio_{st.session_state.current_question}")
+# Display all questions, but initially make them inactive/faded
+for idx, scenario in enumerate(scenarios):
+    if st.session_state.current_question >= idx + 1:
+        st.subheader(scenario["scenario"])
+        choice = st.radio(
+            "Choose your strategy:", 
+            scenario["options"], 
+            key=f"radio_{idx}",
+            disabled=st.session_state.submissions[idx]
+        )
 
-    if st.button("Submit", key=f"button_{st.session_state.current_question}"):
-        if choice == scenario["answer"]:
-            st.success(scenario["feedback"])
-            st.session_state.score += 1
-        else:
-            st.error("Oops! Not the best strategy, but keep going!")
+        # Display the submit button only for the active question
+        if not st.session_state.submissions[idx]:
+            if st.button("Submit", key=f"submit_{idx}"):
+                if choice == scenario["answer"]:
+                    st.success(scenario["feedback"])
+                    st.session_state.score += 1
+                else:
+                    st.error("Oops! Not the best strategy, but keep going!")
+                st.session_state.submissions[idx] = True
 
-        # Move to the next question without rerun
-        st.session_state.current_question += 1
+        # Activate the "Next" button after the answer is submitted
+        if st.session_state.submissions[idx]:
+            if idx < len(scenarios) - 1:
+                if st.button("Next", key=f"next_{idx}"):
+                    st.session_state.current_question += 1
 
 # Show the final score and message only after all questions are answered
 if st.session_state.current_question > len(scenarios):
