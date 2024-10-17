@@ -35,10 +35,10 @@ if st.button("Start Your Adventure"):
         }
     ]
     
-    for scenario in scenarios:
+    for i, scenario in enumerate(scenarios):
         st.subheader(scenario["scenario"])
-        choice = st.radio("Choose your strategy:", scenario["options"], key=scenario["scenario"])
-        if st.button("Submit", key=scenario["scenario"]):
+        choice = st.radio("Choose your strategy:", scenario["options"], key=f"radio_{i}")
+        if st.button("Submit", key=f"button_{i}"):
             if choice == scenario["answer"]:
                 st.success(scenario["feedback"])
                 score += 1
