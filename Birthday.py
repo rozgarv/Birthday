@@ -40,7 +40,7 @@ scenarios = [
 if st.session_state.current_question == 0:
     if st.button("Start Your Adventure"):
         st.session_state.current_question = 1
-        st.experimental_rerun()  # Refresh the app to move to the first question
+        # No need to rerun here, app will naturally update
 
 # Show the current question based on the progress
 if st.session_state.current_question > 0 and st.session_state.current_question <= len(scenarios):
