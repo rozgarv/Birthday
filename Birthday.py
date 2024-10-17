@@ -1,87 +1,59 @@
 import streamlit as st
-import random
+import time
 
-# Set page layout
-st.set_page_config(page_title="Shristee's Salix Defense Challenge", layout="wide")
+st.set_page_config(page_title="Happy Birthday Shristee!", layout="centered")
 
-# Title and introduction
+# Welcome Screen
 st.title("🎉 Happy Birthday, Shristee! 🎉")
-st.subheader("Welcome to your Salix Defense Challenge!")
+st.write("Can you help protect the *Salix* plants from herbivores today?")
+st.write("Use your knowledge of plant volatiles to attract predators and defend the plants!")
 
-st.write("""
-Today, you are a brave **Salix tree** facing herbivore attacks, but don't worry! Your research comes to life here. 
-Release the right **volatile chemicals** and attract predators to protect yourself from herbivores.
-Let's see how well you can balance the defense!
-""")
+# Starting the adventure
+if st.button("Start Your Adventure"):
+    st.write("Your adventure begins now! 🌿")
 
-# Initialize session state for question tracking
-if 'question_index' not in st.session_state:
-    st.session_state['question_index'] = 0
-    st.session_state['score'] = 0
-
-# Adventure questions/scenarios
-adventure = [
-    {
-        "scenario": "A caterpillar begins munching on your leaves. You must release a volatile to attract a predator. What will you do?",
-        "options": ["Release (Z)-3-hexenyl acetate to attract ladybugs", "Release linalool to attract hoverflies", "Wait to release volatiles"],
-        "correct": 0,
-        "feedback": [
-            "Good choice! Ladybugs love (Z)-3-hexenyl acetate and will help keep the caterpillar population down.",
-            "Hoverflies prefer linalool, but they're not the best for this job. Try again!",
-            "Oops! The herbivores are causing too much damage while you're waiting!"
-        ]
-    },
-    {
-        "scenario": "A new wave of herbivores is attacking! This time, a beetle species is devouring your branches. How will you defend?",
-        "options": ["Release methyl salicylate", "Release (E)-β-ocimene", "Release no volatile"],
-        "correct": 1,
-        "feedback": [
-            "Methyl salicylate is good for general plant defense, but not the best for attracting predators here!",
-            "Great choice! (E)-β-ocimene will bring in some much-needed hoverflies to fend off the beetles.",
-            "Releasing no volatile won’t help. The beetles are still munching away!"
-        ]
-    },
-    {
-        "scenario": "The herbivores seem to be adapting. You need to enhance your defense strategy. Which predator will you try to attract more?",
-        "options": ["Hoverflies", "Parasitic wasps", "Ladybugs"],
-        "correct": 2,
-        "feedback": [
-            "Hoverflies are helpful, but ladybugs can take on the most herbivores in this situation.",
-            "Parasitic wasps can help, but they might not respond well to this scenario.",
-            "Excellent! Ladybugs will swarm in and protect your branches from harm!"
-        ]
-    }
-]
-
-# Question display logic
-question_index = st.session_state['question_index']
-
-if question_index < len(adventure):
-    current_scenario = adventure[question_index]
-
-    st.write(f"**Scenario:** {current_scenario['scenario']}")
+    # Adventure Scenarios
+    score = 0
+    scenarios = [
+        {
+            "scenario": "Herbivores are attacking *Salix* plants! How will you help the plant release volatiles to attract the best predator?",
+            "options": ["Increase volatile release right away", "Wait until herbivores cause more damage", "Release low levels of volatiles over time"],
+            "answer": "Increase volatile release right away",
+            "feedback": "Great choice! Releasing volatiles early helps attract predators before the herbivores cause too much damage."
+        },
+        {
+            "scenario": "The herbivores are adapting to your strategy. What should the plant do next?",
+            "options": ["Change the composition of volatiles", "Keep releasing the same volatiles", "Stop volatile release"],
+            "answer": "Change the composition of volatiles",
+            "feedback": "Smart move! Changing the volatile mix confuses herbivores and keeps predators coming."
+        },
+        {
+            "scenario": "It's mid-season, and more predators are available. How can you maximize predator attraction?",
+            "options": ["Release high bursts of volatiles during the day", "Release volatiles at night", "Release volatiles in steady low amounts"],
+            "answer": "Release high bursts of volatiles during the day",
+            "feedback": "Correct! Predators are more active during the day, so daytime bursts are most effective."
+        }
+    ]
     
-    # Present multiple choice options
-    choice = st.radio("What will you do?", current_scenario["options"])
-
-    if st.button("Submit"):
-        selected_index = current_scenario["options"].index(choice)
-        feedback = current_scenario["feedback"][selected_index]
-        st.write(feedback)
-
-        if selected_index == current_scenario["correct"]:
-            st.session_state['score'] += 1
-
-        # Move to next question
-        st.session_state['question_index'] += 1
-        st.experimental_rerun()  # Re-run app to load next question
-
-else:
-    st.write("🎉 You've completed the Salix Defense Challenge! 🎉")
-    st.write(f"Your final score: {st.session_state['score']} out of {len(adventure)}")
+    for scenario in scenarios:
+        st.subheader(scenario["scenario"])
+        choice = st.radio("Choose your strategy:", scenario["options"], key=scenario["scenario"])
+        if st.button("Submit", key=scenario["scenario"]):
+            if choice == scenario["answer"]:
+                st.success(scenario["feedback"])
+                score += 1
+            else:
+                st.error("Oops! Not the best strategy, but keep going!")
+            time.sleep(1)  # Pause for dramatic effect
+            st.write(f"Your current score: {score}/{len(scenarios)}")
     
-    st.balloons()  # Birthday balloons!
+    # Final Score
+    st.balloons()
+    st.write(f"🎉 You completed the adventure with a score of {score}/{len(scenarios)}! 🎉")
+    if score == len(scenarios):
+        st.success("Wow, perfect score! You're a *Salix* defender expert!")
+    else:
+        st.write("Nice try! You've done a great job protecting the *Salix* plants!")
 
-    # Final birthday message
-    st.subheader("Happy Birthday Shristee!")
-    st.write("Wishing you a wonderful day full of joy, laughter, and lots of good wishes!")
+# Footer birthday message
+st.write("Wishing you a fantastic birthday filled with joy and success, Shristee! 💐")
