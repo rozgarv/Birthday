@@ -68,16 +68,10 @@ for idx, scenario in enumerate(scenarios):
             if idx < len(scenarios) - 1:
                 if st.button("Next", key=f"next_{idx}"):
                     st.session_state.current_question += 1
+            else:
+                # This block will execute after the third (final) question is submitted
+                st.balloons()  # Balloons after the last question is answered
+                st.success(f"🎉 Congratulations, Shristee! You completed the adventure with a score of {st.session_state.score}/{len(scenarios)}! 🎉")
 
-# Show the final score and message only after all questions are answered
-if st.session_state.current_question > len(scenarios):
-    st.balloons()
-    st.write(f"🎉 You completed the adventure with a score of {st.session_state.score}/{len(scenarios)}! 🎉")
-    
-    if st.session_state.score == len(scenarios):
-        st.success("Wow, perfect score! You're a *Salix* defender expert!")
-    else:
-        st.write("Nice try! You've done a great job protecting the *Salix* plants!")
-
-    # Footer birthday message
-    st.write("Wishing you a fantastic birthday filled with joy and success, Shristee! 💐")
+                # Final birthday message
+                st.write("Wishing you a fantastic birthday filled with joy and success, Shristee! 💐")
