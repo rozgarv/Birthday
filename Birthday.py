@@ -40,6 +40,7 @@ scenarios = [
 if st.session_state.current_question == 0:
     if st.button("Start Your Adventure"):
         st.session_state.current_question = 1
+        st.experimental_rerun()  # Refresh the app to move to the first question
 
 # Show the current question based on the progress
 if st.session_state.current_question > 0 and st.session_state.current_question <= len(scenarios):
@@ -58,8 +59,9 @@ if st.session_state.current_question > 0 and st.session_state.current_question <
 
         # Move to the next question
         st.session_state.current_question += 1
+        st.experimental_rerun()  # Refresh the app to display the next question
 
-# Show the final score after all questions
+# Show the final score and message only after all questions are answered
 if st.session_state.current_question > len(scenarios):
     st.balloons()
     st.write(f"🎉 You completed the adventure with a score of {st.session_state.score}/{len(scenarios)}! 🎉")
@@ -69,5 +71,5 @@ if st.session_state.current_question > len(scenarios):
     else:
         st.write("Nice try! You've done a great job protecting the *Salix* plants!")
 
-# Footer birthday message
-st.write("Wishing you a fantastic birthday filled with joy and success, Shristee! 💐")
+    # Footer birthday message
+    st.write("Wishing you a fantastic birthday filled with joy and success, Shristee! 💐")
